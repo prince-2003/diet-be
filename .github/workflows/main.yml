@@ -1,0 +1,32 @@
+name: Chained GET Requests
+
+on:
+  schedule:
+    - cron: '30 15 * * *' 
+
+jobs:
+  post-task:
+    runs-on: ubuntu-latest
+
+    steps:
+      
+      - name: Get Missing Meals Log
+        run: |
+          response=$(curl -s -o response.json -w "%{http_code}" https://diet-be.onrender.com/log_missing_meals)
+          if [ "$response" -eq 200 ]; then
+            echo "First request successful, proceeding to second request"
+          else
+            echo "First request failed, skipping second request"
+            exit 1
+          fi
+        
+      
+      - name: Get AI Adjustment
+        run: |
+          response=$(curl -s -o response.json -w "%{http_code}" https://diet-be.onrender.com/ai_adjustment)
+          if [ "$response" -eq 200 ]; then
+            echo "AI adjustment request successful"
+          else
+            echo "AI adjustment request failed"
+            exit 1
+          fi
