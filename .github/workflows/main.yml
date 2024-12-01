@@ -2,7 +2,7 @@ name: Chained GET Requests
 
 on:
   schedule:
-    - cron: '45 13 * * *' # Adjust to your preferred UTC time (e.g., 2:30 AM IST)
+    - cron: '55 15 * * *' # Adjust to your preferred UTC time (e.g., 2:30 AM IST)
 
 jobs:
   post-task:
