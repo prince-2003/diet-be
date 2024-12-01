@@ -1,5 +1,5 @@
-from firebase_admin import auth, exceptions
-from fastapi import FastAPI, Request, HTTPException
+from firebase_admin import auth
+from fastapi import Request, HTTPException
 
 
 async def verify_session_token(request: Request):
@@ -8,7 +8,6 @@ async def verify_session_token(request: Request):
         raise HTTPException(status_code=401, detail="Unauthorized")
 
     try:
-        # Verify the session cookie
         decoded_token = auth.verify_session_cookie(session_cookie, check_revoked=True)
         return decoded_token
     except auth.InvalidSessionCookieError:

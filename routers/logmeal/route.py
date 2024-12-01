@@ -15,7 +15,7 @@ MEAL_SCHEDULE = {
 
 router = APIRouter()
 
-@router.post("/check_missing_meals")
+@router.get("/log_missing_meals")
 async def check_missing_meals():
     now = datetime.now(timezone.utc)
     year = str(now.year)
