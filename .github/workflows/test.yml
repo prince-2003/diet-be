@@ -2,7 +2,7 @@ name: Making Server Active And Running Automated Task
 
 on:
   schedule:
-    - cron: '30 7 * * *' 
+    - cron: '30 8 * * *' 
 
 jobs:
   post-task:
