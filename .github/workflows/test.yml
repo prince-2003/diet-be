@@ -1,0 +1,26 @@
+name: Making Server Active
+
+on:
+  schedule:
+    - cron: '45 5 * * *' 
+
+jobs:
+  post-task:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get / Endpoint
+        run: |
+          echo "Making first GET request to /"
+          # Make the GET request and capture both the output and the HTTP status code
+          response=$(curl -s -w "%{http_code}" -o response.json https://diet-be.onrender.com/)
+          http_code=$(echo "$response" | tail -n 1)  # Extract HTTP status code
+          
+          echo "Response status code: $http_code"
+          # Check if the response status code is 200 (OK)
+          if [ "$http_code" -eq 200 ]; then
+            echo "First request successful, Server is Active"
+          else
+            echo "First request failed with status code $http_code"
+            exit 1  # Exit if the first request fails
+          fi
