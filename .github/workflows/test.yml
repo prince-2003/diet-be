@@ -2,7 +2,7 @@ name: Making Server Active And Running Automated Task
 
 on:
   schedule:
-    - cron: '30 8 * * *' 
+    - cron: '00 18 * * *' 
 
 jobs:
   post-task:
@@ -26,7 +26,7 @@ jobs:
           fi
       - name: Run automated task
         run: |
-            echo "Making second GET request to /ai_adjustment"
+            echo "Making second GET request to /automate"
             response=$(curl -s -w "%{http_code}" -o response.json https://diet-be.onrender.com/automate)
             http_code=$(echo "$response" | tail -n 1)  # Extract HTTP status code
             
