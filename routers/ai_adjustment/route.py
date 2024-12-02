@@ -8,14 +8,14 @@ from datetime import datetime, timedelta, timezone
 import json
 
 genai.configure(api_key=GEMINI_API_KEY)
-router = APIRouter()
+
 
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
 user_memory = {}
 
-@router.get("/ai_adjustment")
-async def ai_adjustment(request: Request):
+
+async def ai_adjustment():
     """
     Process the user's diet plan, logged meals, and fetch AI-generated adjustments 
     from the Gemini API based on the user's input, including both today's and last week's meal logs.

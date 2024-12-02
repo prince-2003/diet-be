@@ -3,7 +3,6 @@ from datetime import datetime, timezone
 from firebase_client import db
 from routers.session.utils import verify_session_token
 from fastapi.responses import JSONResponse
-from apscheduler.schedulers.background import BackgroundScheduler
 
 
 MEAL_SCHEDULE = {
@@ -15,8 +14,8 @@ MEAL_SCHEDULE = {
 
 router = APIRouter()
 
-@router.get("/log_missing_meals")
-async def check_missing_meals():
+
+async def log_missing_meals():
     now = datetime.now(timezone.utc)
     year = str(now.year)
     month = str(now.month).zfill(2)
@@ -86,6 +85,3 @@ async def log_meal(request: Request, token_data=Depends(verify_session_token)):
     
     return JSONResponse(content={'status': 'success', 'message': 'Meal logged successfully!'})
 
-scheduler = BackgroundScheduler()
-# scheduler.add_job(check_missing_meals, "cron", hour=23, minute=59)  # Run at 11:59 PM UTC daily
-scheduler.start()

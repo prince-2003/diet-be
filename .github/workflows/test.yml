@@ -1,8 +1,8 @@
-name: Making Server Active
+name: Making Server Active And Running Automated Task
 
 on:
   schedule:
-    - cron: '45 5 * * *' 
+    - cron: '55 6 * * *' 
 
 jobs:
   post-task:
@@ -24,3 +24,16 @@ jobs:
             echo "First request failed with status code $http_code"
             exit 1  # Exit if the first request fails
           fi
+      - name: Run automated task
+        run: |
+            echo "Making second GET request to /ai_adjustment"
+            response=$(curl -s -w "%{http_code}" -o response.json https://diet-be.onrender.com/automate)
+            http_code=$(echo "$response" | tail -n 1)  # Extract HTTP status code
+            
+            echo "Response status code: $http_code"
+            if [ "$http_code" -eq 200 ]; then
+              echo "Second request successful"
+            else
+              echo "Second request failed with status code $http_code"
+              exit 1  # Exit if the second request fails
+            fi

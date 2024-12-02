@@ -1,10 +1,11 @@
 from contextlib import asynccontextmanager
-from typing import Optional
-from fastapi import FastAPI
+import asyncio
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from routers.ai_adjustment.route import router as airouter
+from routers.ai_adjustment.route import ai_adjustment
 from routers.logmeal.route import router as log_mealrouter
+from routers.logmeal.route import log_missing_meals
 from routers.session.route import router as sessionrouter
 from routers.user.route import router as userrouter
 from constants import SERVER_URL, PORT, ENV
@@ -31,7 +32,18 @@ app.add_middleware(
 async def root():
     return {"message": "Server is running"}
 
-app.include_router(airouter, tags=["aiadjustment"])
+@app.get("/automate")
+async def automate():
+    try:
+        await log_missing_meals()
+        await asyncio.sleep(120)
+        await ai_adjustment()
+        return {"message": "Automated AI adjustments for all users."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Automation failed: {e}")
+    
+
+
 app.include_router(log_mealrouter, tags=["logmeal"])
 app.include_router(sessionrouter, tags=["session"])
 app.include_router(userrouter, tags=["user"])
